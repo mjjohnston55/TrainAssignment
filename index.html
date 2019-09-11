@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Train Times</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-database.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+</head>
+
+<body>
+        <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                  <h1 class="display-4">Train Times</h1>
+                </div>
+              </div>
+        <div class="card">
+                <div class="card-header">
+                 Active Trains
+                </div>
+                <div class="card-body">
+                        <table class="table" id="main-table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col" id="employee-name">Train Name</th>
+                                    <th scope="col" id="role">Destination</th>
+                                    <th scope="col" id="start-date">Frequency (min)</th>
+                                    <th scope="col" id="months-worked">Next Arrival</th>
+                                    <th scope="col" id="monthly-rate">Minutes Away</th>
+                                  </tr>
+                                </thead>
+                                </table>
+                </div>
+              </div>
+              <form>
+              <div class="form-group">
+                    <label for="inputName">Train Name</label>
+                    <input type="text" class="form-control" id="inputName" placeholder="Train Name">
+                  </div>
+            <div class="form-group">
+                    <label for="inputRole">Train Destination</label>
+                    <input type="text" class="form-control" id="inputDestination" placeholder="Train Destination">
+                    </div>
+            <div class="form-group">
+                    <label for="inputStartDate">First Train Time</label>
+                    <input type="text" class="form-control" id="inputTime" placeholder="First Train Time (HH:mm - military time">
+                    </div>
+            <div class="form-group">
+                    <label for="inputRate">Train Frequency</label>
+                    <input type="text" class="form-control" id="inputFrequency" placeholder="Train Frequency">
+                    </div>
+                      
+                </form>
+                <button type="button" class="btn btn-secondary" id="submit-button">Submit</button>
+
+<script>
+
+
+ //  Firebase configuration
+ var firebaseConfig = {
+    apiKey: "AIzaSyDX6gSiigYOsChwf-0KT6iUtrug2JqyDpo",
+    authDomain: "employee-billing-8a51d.firebaseapp.com",
+    databaseURL: "https://employee-billing-8a51d.firebaseio.com",
+    projectId: "employee-billing-8a51d",
+    storageBucket: "",
+    messagingSenderId: "203341062046",
+    appId: "1:203341062046:web:c1733d03f00339a3bb808f"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+    var database = firebase.database();
+    // Create a variable to reference the database
+    var name = "";
+    var destination = "";
+    var frequency = "";
+    var nextArrival = "";
+    var minutesAway = "";
+
+    //  Click Event
+    $("#submit-button").on("click", function(event) {
+      // Don't refresh the page!
+      event.preventDefault();
+
+      // store/retrieve most recent train info
+      name = $("#inputName").val().trim();
+      destination = $("#inputDestination").val().trim();
+      nextArrival = $("#inputTime").val().trim();
+      frequency = $("#inputFrequency").val().trim();
+      // initial data to firebase database
+      database.ref().set({
+        name: name,
+        destination: destination,
+        nextArrival: nextArrival,
+        frequency: frequency
+      });
